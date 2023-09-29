@@ -8,10 +8,14 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import os
+import matplotlib.pyplot as plt
+import plotly.express as px
+import seaborn as sns
 import pickle 
-# from catboost import CatBoostClassifier
+from catboost import CatBoostClassifier
 import io
-from sklearn.impute import  SimpleImputer
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer, SimpleImputer
 import plotly.graph_objs as go 
 
 st.title('Определение музыкального жанра')
@@ -96,40 +100,27 @@ else:
         (dat['valence'] <= end_val) &
         (dat['mode'] == select_event_3)
     ]
-# отфильтрованные данные
+# Отобразите отфильтрованные данные
 st.write(filtered_data.head(10))
        
 st.header('Статистические характеристики музыкального жанра: '+select_event_2)
 st.write(filtered_data.describe())
 
 corr_matrix = filtered_data.corr()  
-#fig = go.Figure(data=go.Heatmap(z=corr_matrix.values, x=corr_matrix.columns, 
-                                #y=corr_matrix.columns))
-#st.header('Интерактивная тепловая карта для корреляции')
-#st.plotly_chart(fig)
-
-#fig = px.scatter_matrix(filtered_data, dimensions=["acousticness", "instrumentalness", 
-                                                  # "loudness", "energy"], color="mode")
-#st.header('Матрица диаграмм рассеяния')
-
-#fig.update_layout(
-    #width=800,  # Укажите ширину
-    #height=600)  # Укажите высоту
-
-#st.plotly_chart(fig)
-
-# Создаем тепловую карту
-fig = go.Figure(data=go.Heatmap(z=corr_matrix.values, x=corr_matrix.columns, y=corr_matrix.columns))
-fig.update_layout(
-    title='Тепловая карта корреляции',
-    width=800,
-    height=800
-)
-
+fig = go.Figure(data=go.Heatmap(z=corr_matrix.values, x=corr_matrix.columns, 
+                                y=corr_matrix.columns))
 st.header('Интерактивная тепловая карта для корреляции')
 st.plotly_chart(fig)
 
+fig = px.scatter_matrix(filtered_data, dimensions=["acousticness", "instrumentalness", 
+                                                   "loudness", "energy"], color="mode")
+st.header('Матрица диаграмм рассеяния')
 
+fig.update_layout(
+    width=800,  # Укажите ширину
+    height=600  # Укажите высоту
+)
+st.plotly_chart(fig)
 
 # Загрузите encoder из файла
 with open('encoder.pkl', 'rb') as encoder_file:
@@ -154,12 +145,13 @@ def pres(data):
   numeric_features = data.select_dtypes(include=['number'])
   categorical_features = data.select_dtypes(include=['object'])
 
-  numeric_imputed = numeric_features.fillna(numeric_features.median())
+  numeric_imputer = IterativeImputer(max_iter=10, random_state=0)
   categorical_imputer = SimpleImputer(strategy="most_frequent")
 
+  numeric_filled = numeric_imputer.fit_transform(numeric_features)
   categorical_filled = categorical_imputer.fit_transform(categorical_features)
 
-  numeric_filled_df = pd.concat([data.drop(columns=numeric_features.columns), numeric_imputed], axis=1)
+  numeric_filled_df = pd.DataFrame(numeric_filled, columns=numeric_features.columns)
   categorical_filled_df = pd.DataFrame(categorical_filled, columns=categorical_features.columns)
 
   data = pd.concat([numeric_filled_df, categorical_filled_df], axis=1)
