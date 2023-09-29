@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 import os
 import pickle 
-from catboost import CatBoostClassifier
+# from catboost import CatBoostClassifier
 import io
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer, SimpleImputer
