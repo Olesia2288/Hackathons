@@ -115,9 +115,9 @@ corr_matrix = filtered_data.corr()
 #st.header('Матрица диаграмм рассеяния')
 
 #fig.update_layout(
-    width=800,  # Укажите ширину
-    height=600  # Укажите высоту
-)
+    #width=800,  # Укажите ширину
+    #height=600)  # Укажите высоту
+
 #st.plotly_chart(fig)
 
 # Создаем тепловую карту
