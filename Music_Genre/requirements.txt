@@ -4,4 +4,9 @@ plotly==4.14.3
 pandas
 numpy
 scikit-learn
-catboost
+catboost==1.1.1
+
+
+
+
+
