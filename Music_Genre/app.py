@@ -11,8 +11,7 @@ import os
 import pickle 
 # from catboost import CatBoostClassifier
 import io
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer, SimpleImputer
+from sklearn.impute import  SimpleImputer
 import plotly.graph_objs as go 
 
 st.title('Определение музыкального жанра')
@@ -155,13 +154,12 @@ def pres(data):
   numeric_features = data.select_dtypes(include=['number'])
   categorical_features = data.select_dtypes(include=['object'])
 
-  numeric_imputer = IterativeImputer(max_iter=10, random_state=0)
+  numeric_imputed = numeric_features.fillna(numeric_features.median())
   categorical_imputer = SimpleImputer(strategy="most_frequent")
 
-  numeric_filled = numeric_imputer.fit_transform(numeric_features)
   categorical_filled = categorical_imputer.fit_transform(categorical_features)
 
-  numeric_filled_df = pd.DataFrame(numeric_filled, columns=numeric_features.columns)
+  numeric_filled_df = pd.concat([data.drop(columns=numeric_features.columns), numeric_imputed], axis=1)
   categorical_filled_df = pd.DataFrame(categorical_filled, columns=categorical_features.columns)
 
   data = pd.concat([numeric_filled_df, categorical_filled_df], axis=1)
