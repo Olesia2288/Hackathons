@@ -5,7 +5,7 @@ Created on Tue Sep 26 19:10:27 2023
 @author: user
 """
 
-!pip install plotly
+pip install plotly
 import streamlit as st
 import pandas as pd
 import numpy as np
