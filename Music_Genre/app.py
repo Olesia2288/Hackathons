@@ -8,7 +8,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import os
-import plotly.express as px
 import seaborn as sns
 import pickle 
 from catboost import CatBoostClassifier
@@ -99,27 +98,40 @@ else:
         (dat['valence'] <= end_val) &
         (dat['mode'] == select_event_3)
     ]
-# Отобразите отфильтрованные данные
+# отфильтрованные данные
 st.write(filtered_data.head(10))
        
 st.header('Статистические характеристики музыкального жанра: '+select_event_2)
 st.write(filtered_data.describe())
 
 corr_matrix = filtered_data.corr()  
-fig = go.Figure(data=go.Heatmap(z=corr_matrix.values, x=corr_matrix.columns, 
+#fig = go.Figure(data=go.Heatmap(z=corr_matrix.values, x=corr_matrix.columns, 
                                 y=corr_matrix.columns))
-st.header('Интерактивная тепловая карта для корреляции')
-st.plotly_chart(fig)
+#st.header('Интерактивная тепловая карта для корреляции')
+#st.plotly_chart(fig)
 
-fig = px.scatter_matrix(filtered_data, dimensions=["acousticness", "instrumentalness", 
+#fig = px.scatter_matrix(filtered_data, dimensions=["acousticness", "instrumentalness", 
                                                    "loudness", "energy"], color="mode")
-st.header('Матрица диаграмм рассеяния')
+#st.header('Матрица диаграмм рассеяния')
 
-fig.update_layout(
+#fig.update_layout(
     width=800,  # Укажите ширину
     height=600  # Укажите высоту
 )
+#st.plotly_chart(fig)
+
+# Создаем тепловую карту
+fig = go.Figure(data=go.Heatmap(z=corr_matrix.values, x=corr_matrix.columns, y=corr_matrix.columns))
+fig.update_layout(
+    title='Тепловая карта корреляции',
+    width=800,
+    height=800
+)
+
+st.header('Интерактивная тепловая карта для корреляции')
 st.plotly_chart(fig)
+
+
 
 # Загрузите encoder из файла
 with open('encoder.pkl', 'rb') as encoder_file:
