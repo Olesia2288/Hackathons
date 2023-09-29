@@ -106,12 +106,12 @@ st.write(filtered_data.describe())
 
 corr_matrix = filtered_data.corr()  
 #fig = go.Figure(data=go.Heatmap(z=corr_matrix.values, x=corr_matrix.columns, 
-                                y=corr_matrix.columns))
+                                #y=corr_matrix.columns))
 #st.header('Интерактивная тепловая карта для корреляции')
 #st.plotly_chart(fig)
 
 #fig = px.scatter_matrix(filtered_data, dimensions=["acousticness", "instrumentalness", 
-                                                   "loudness", "energy"], color="mode")
+                                                  # "loudness", "energy"], color="mode")
 #st.header('Матрица диаграмм рассеяния')
 
 #fig.update_layout(
