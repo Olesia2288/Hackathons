@@ -23,6 +23,7 @@ dat = pd.read_csv(url)
 
 dat = dat.drop('instance_id', axis=1)
 dat.dropna(inplace=True)
+dat = dat.dropna()
 
 # Создаем словарь с медианными значениями duration_ms для каждого жанра
 median_duration_ms_by_genre = dat.groupby('music_genre')['duration_ms'].median().to_dict()
