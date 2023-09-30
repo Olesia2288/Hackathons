@@ -15,6 +15,7 @@ import io
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer, SimpleImputer
 import plotly.graph_objs as go 
+import requests
 
 st.title('Определение музыкального жанра')
 
