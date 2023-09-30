@@ -18,7 +18,9 @@ import plotly.graph_objs as go
 
 st.title('Определение музыкального жанра')
 
-dat = pd.read_csv('train.csv')
+url = 'https://github.com/Olesia2288/Hackathons/raw/main/Music_Genre/train.csv'
+dat = pd.read_csv(url)
+
 dat = dat.drop('instance_id', axis=1)
 dat.dropna(inplace=True)
 
@@ -120,13 +122,16 @@ fig.update_layout(
 )
 st.plotly_chart(fig)
 
-# Загрузите encoder из файла
-with open('encoder.pkl', 'rb') as encoder_file:
-    encoder = pickle.load(encoder_file)
+encoder_url = 'https://github.com/Olesia2288/Hackathons/raw/main/Music_Genre/encoder.pkl'
+model_url = 'https://github.com/Olesia2288/Hackathons/raw/main/Music_Genre/model.pkl'
+
+# Загрузите encoder из URL
+encoder_response = requests.get(encoder_url)
+encoder = pickle.loads(encoder_response.content)
     
-# Загрузите вашу модель до основного кода Streamlit
-with open('model.pkl', 'rb') as model_file:
-    model = pickle.load(model_file)     
+# Загрузите модель из URL
+model_response = requests.get(model_url)
+model = pickle.loads(model_response.content)   
                
 # Определите функцию для выполнения предсказаний
 def make_prediction(model, data):
