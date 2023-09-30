@@ -107,7 +107,9 @@ st.write(filtered_data.head(10))
 st.header('Статистические характеристики музыкального жанра: '+select_event_2)
 st.write(filtered_data.describe())
 
-corr_matrix = filtered_data.corr()  
+# Исключите строковые столбцы из filtered_data
+filtered_number = filtered_data.select_dtypes(include=['number'])
+corr_matrix = filtered_number.corr()  
 fig = go.Figure(data=go.Heatmap(z=corr_matrix.values, x=corr_matrix.columns, 
                                 y=corr_matrix.columns))
 st.header('Интерактивная тепловая карта для корреляции')
